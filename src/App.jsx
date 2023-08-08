@@ -9,6 +9,7 @@ const API = "https://jsonplaceholder.typicode.com/users";
 const App = () => {
   const [users, setUsers] = useState([]);
   const [token, setToken] = useState();
+  const [path, setPath] = useState();
 
   const login = async () => {
     try {
@@ -43,6 +44,7 @@ const App = () => {
       } else {
         // console.log(response.data);
         setToken(response.data.data.token);
+        setPath(response.data.path);
         return response.data.data.token;
       }
     } catch (error) {
@@ -109,12 +111,13 @@ const App = () => {
               <th>Account No.</th>
               <th>IFSC Code</th>
               <th>UTR No.</th>
+              <th>Screenshot</th>
               <th>Amount</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            <UserData users={users} token={token} />
+            <UserData users={users} token={token} path={path} />
           </tbody>
         </table>
       </div>
