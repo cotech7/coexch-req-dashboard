@@ -1,8 +1,18 @@
 import { useState } from "react";
 import axios from "axios";
 
-const UserData = ({ users, token }) => {
+const UserData = ({ users, token, path }) => {
   const [showAlert, setShowAlert] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const openImageModal = (image_name) => {
+    setModalImage(image_name);
+  };
+
+  const closeImageModal = () => {
+    setModalImage(null);
+  };
 
   const showSuccessAlertAndReload = () => {
     setShowAlert(true);
@@ -66,6 +76,7 @@ const UserData = ({ users, token }) => {
           amount,
           balance,
           pl_balance,
+          image_name,
         } = user;
 
         return (
@@ -74,9 +85,17 @@ const UserData = ({ users, token }) => {
             <td>{account_number}</td>
             <td>{ifsc_code}</td>
             <td>{utr_number}</td>
+            <td>
+              {image_name.startsWith("UTR") ? (
+                <a href="#" onClick={() => openImageModal(path + image_name)}>
+                  View
+                </a>
+              ) : (
+                // "No Image"
+                ""
+              )}
+            </td>
             <td>{amount}</td>
-            {/* <td>{balance}</td> */}
-            {/* <td>{pl_balance}</td> */}
             <td>
               <button
                 className="action-button"
@@ -90,6 +109,17 @@ const UserData = ({ users, token }) => {
           </tr>
         );
       })}
+      {/* Modal */}
+      {modalImage && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <span className="close" onClick={() => closeImageModal()}>
+              &times;
+            </span>
+            <img className="modal-img" src={modalImage} alt="Modal" />
+          </div>
+        </div>
+      )}
     </>
   );
 };
