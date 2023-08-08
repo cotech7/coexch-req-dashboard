@@ -83,6 +83,7 @@ const App = () => {
         config
       );
       setUsers(response.data.data);
+      setPath(response.data.path);
       // console.log(response.data.data);
     } catch (e) {
       console.error(e);
