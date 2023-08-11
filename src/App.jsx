@@ -97,6 +97,7 @@ const App = () => {
   return (
     <>
       <div>
+        <h1>CoExchange Deposit Dashboard</h1>
         <button
           className="action-button"
           onClick={() => window.location.reload()}
