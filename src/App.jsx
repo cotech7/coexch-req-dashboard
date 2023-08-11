@@ -15,8 +15,8 @@ const App = () => {
     try {
       let data = JSON.stringify({
         username: "Coexchange",
-      password: "Piou1234",
-      systemId: 10008,
+        password: "Piou1234",
+        systemId: 10008,
       });
       let config = {
         method: "post",
@@ -114,6 +114,7 @@ const App = () => {
               <th>UTR No.</th>
               <th>Screenshot</th>
               <th>Amount</th>
+              <th>Date & Time</th>
               <th>Action</th>
             </tr>
           </thead>
