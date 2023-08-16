@@ -1,22 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Row, Col, Table, Button } from "react-bootstrap";
 import UserData from "./components/UserData.jsx";
 import "./App.css";
 
-const API = "https://jsonplaceholder.typicode.com/users";
-
 const App = () => {
   const [users, setUsers] = useState([]);
-  const [token, setToken] = useState();
+  const [token, setToken] = useState(null);
   const [path, setPath] = useState();
 
   const login = async () => {
     try {
       let data = JSON.stringify({
-        // username: "Coexchange",
-        // password: "Piou1234",
-        // systemId: 10008,
+        username: import.meta.env.VITE_REACT_APP_USERNAME,
+        password: import.meta.env.VITE_REACT_APP_PASSWORD,
+        systemId: import.meta.env.VITE_REACT_APP_SYSTEM_ID,
       });
       let config = {
         method: "post",
@@ -43,18 +40,19 @@ const App = () => {
         };
       } else {
         // console.log(response.data);
-        setToken(response.data.data.token);
-        setPath(response.data.path);
-        return response.data.data.token;
+        const newToken = response.data.data.token;
+        // setToken(newToken);
+        sessionStorage.setItem("token", newToken);
+
+        return newToken;
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (token) => {
     try {
-      let token = await login();
       // console.log(token);
       let data = JSON.stringify({
         type: "",
@@ -91,7 +89,26 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
+    const fetchData = async () => {
+      try {
+        let tokenFromStorage = sessionStorage.getItem("token");
+        if (!tokenFromStorage) {
+          const newToken = await login();
+          if (newToken) {
+            // console.log(`this is newToken ${newToken}`);
+            setToken(newToken); // Set the token state here as well
+            await fetchUsers(newToken);
+          }
+        } else {
+          setToken(tokenFromStorage); // Set the token state if already present
+          await fetchUsers(tokenFromStorage);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (

@@ -7,6 +7,7 @@ const UserData = ({ users, token, path }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [remark, setRemark] = useState("");
+  const [actionType, setActionType] = useState();
 
   const openImageModal = (image_name) => {
     setModalImage(image_name);
@@ -25,6 +26,7 @@ const UserData = ({ users, token, path }) => {
   const openModal = (user, actionType) => {
     setSelectedUser(user);
     setIsModalOpen(true);
+    setActionType(actionType);
   };
 
   const closeModal = () => {
@@ -157,9 +159,7 @@ const UserData = ({ users, token, path }) => {
             <td className="td-button">
               <button
                 className="action-button accept"
-                onClick={() =>
-                  acceptRequests(id, user_id, utr_number, amount, token)
-                }
+                onClick={() => openModal(user, "accept")}
               >
                 Accept
               </button>
@@ -192,19 +192,44 @@ const UserData = ({ users, token, path }) => {
             <span className="close" onClick={closeModal}>
               &times;
             </span>
+            {actionType === "accept" && (
+              <>
+                <label>Please confirm request</label>
+              </>
+            )}
 
-            <label>Remark:</label>
-            <textarea
-              value={remark}
-              required
-              onChange={(e) => setRemark(e.target.value)}
-            />
-            <button
-              className="accept"
-              onClick={() => rejectRequests(selectedUser.id, token, remark)}
-            >
-              Reject
-            </button>
+            {actionType === "accept" && (
+              <button
+                className="accept"
+                onClick={() =>
+                  acceptRequests(
+                    selectedUser.id,
+                    selectedUser.user_id,
+                    selectedUser.utr_number,
+                    selectedUser.amount,
+                    token
+                  )
+                }
+              >
+                Accept
+              </button>
+            )}
+            {actionType === "reject" && (
+              <>
+                <label>Remark:</label>
+                <textarea
+                  value={remark}
+                  required
+                  onChange={(e) => setRemark(e.target.value)}
+                />
+                <button
+                  className="accept"
+                  onClick={() => rejectRequests(selectedUser.id, token, remark)}
+                >
+                  Reject
+                </button>
+              </>
+            )}
             <button className="reject" onClick={closeModal}>
               Cancel
             </button>
