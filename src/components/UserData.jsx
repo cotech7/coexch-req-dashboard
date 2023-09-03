@@ -1,13 +1,35 @@
 import { useState } from "react";
 import axios from "axios";
 
-const UserData = ({ users, token, path }) => {
-  const [showAlert, setShowAlert] = useState(false);
+const UserData = ({ users, token, path, refreshData }) => {
   const [modalImage, setModalImage] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [remark, setRemark] = useState("");
   const [actionType, setActionType] = useState();
+  const [modalSuccess, setModalSuccess] = useState(false);
+
+  const openModal = (user, actionType) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+    setActionType(actionType);
+    setModalSuccess(false);
+  };
+
+  const closeModal = () => {
+    setSelectedUser(null);
+    setIsModalOpen(false);
+    setRemark("");
+    setModalSuccess(false);
+  };
+
+  const handleModalSuccess = () => {
+    setModalSuccess(true);
+    setTimeout(() => {
+      closeModal(); // Close modal after a delay (you can adjust the delay time)
+      refreshData(); // Refresh user data
+    }, 2000); // Delay in milliseconds (1 second in this example)
+  };
 
   const openImageModal = (image_name) => {
     setModalImage(image_name);
@@ -17,23 +39,6 @@ const UserData = ({ users, token, path }) => {
     setModalImage(null);
   };
 
-  const showSuccessAlertAndReload = () => {
-    setShowAlert(true);
-
-    window.location.reload();
-  };
-
-  const openModal = (user, actionType) => {
-    setSelectedUser(user);
-    setIsModalOpen(true);
-    setActionType(actionType);
-  };
-
-  const closeModal = () => {
-    setSelectedUser(null);
-    setIsModalOpen(false);
-    setRemark("");
-  };
   const acceptRequests = async (id, user_id, utrNumber, amount, token) => {
     try {
       // let token = await login();
@@ -66,9 +71,7 @@ const UserData = ({ users, token, path }) => {
         throw new Error("Request failed with status: " + response.status);
       } else if (response.data.status === 1) {
         // console.log(response.data);
-        alert("success");
-        showSuccessAlertAndReload();
-        // processUTRNumber(utrNumber, amount);
+        handleModalSuccess();
       } else {
         throw new Error("Invalid response data format");
       }
@@ -80,7 +83,6 @@ const UserData = ({ users, token, path }) => {
 
   const rejectRequests = async (id, token, remark) => {
     try {
-      // let token = await login();
       let data = JSON.stringify({
         id: id,
         notification_status: 2,
@@ -110,8 +112,7 @@ const UserData = ({ users, token, path }) => {
         throw new Error("Request failed with status: " + response.status);
       } else if (response.data.status === 1) {
         // console.log(response.data);
-        alert("Request Rejected");
-        showSuccessAlertAndReload();
+        handleModalSuccess();
       } else {
         throw new Error("Invalid response data format");
       }
@@ -192,6 +193,11 @@ const UserData = ({ users, token, path }) => {
             <span className="close" onClick={closeModal}>
               &times;
             </span>
+            {modalSuccess && (
+              <div className="modal-success">
+                Request successfully processed
+              </div>
+            )}
             {actionType === "accept" && (
               <>
                 <label>Please confirm request</label>
