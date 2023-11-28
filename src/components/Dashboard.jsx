@@ -9,6 +9,8 @@ const Dashboard = ({ onLogout }) => {
   const [path, setPath] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  const whatsappUrl = import.meta.env.VITE_REACT_APP_WHATSAPP_URL;
+
   const login = async () => {
     try {
       let data = JSON.stringify({
@@ -60,7 +62,7 @@ const Dashboard = ({ onLogout }) => {
       let config = {
         method: "post",
         maxBodyLength: Infinity,
-        url: "https://five00-backend.onrender.com/api/requests/sendnotification",
+        url: `${whatsappUrl}/api/requests/sendnotification`,
         headers: {
           "Content-Type": "application/json",
         },
