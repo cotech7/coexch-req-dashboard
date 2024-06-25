@@ -1,11 +1,11 @@
-import { useState } from "react";
-import axios from "axios";
+import { useState } from 'react';
+import axios from 'axios';
 
 const UserData = ({ users, token, path, refreshData }) => {
   const [modalImage, setModalImage] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [remark, setRemark] = useState("");
+  const [remark, setRemark] = useState('');
   const [actionType, setActionType] = useState();
   const [modalSuccess, setModalSuccess] = useState(false);
 
@@ -19,7 +19,7 @@ const UserData = ({ users, token, path, refreshData }) => {
   const closeModal = () => {
     setSelectedUser(null);
     setIsModalOpen(false);
-    setRemark("");
+    setRemark('');
     setModalSuccess(false);
   };
 
@@ -46,34 +46,34 @@ const UserData = ({ users, token, path, refreshData }) => {
         uid: user_id,
         balance: amount,
         withdraw_req_id: id,
-        remark: "sat",
+        remark: 'satie',
       });
       let config = {
-        method: "post",
+        method: 'post',
         maxBodyLength: Infinity,
         headers: {
-          authority: "adminapi.bestlive.io",
-          accept: "application/json, text/plain, */*",
-          "accept-language": "en-IN,en;q=0.9,mr;q=0.8,lb;q=0.7",
+          authority: 'adminapi.bestlive.io',
+          accept: 'application/json, text/plain, */*',
+          'accept-language': 'en-IN,en;q=0.9,mr;q=0.8,lb;q=0.7',
           authorization: `Bearer ${token}`,
-          "cache-control": "no-cache, no-store",
-          "content-type": "application/json",
-          encryption: "false",
+          'cache-control': 'no-cache, no-store',
+          'content-type': 'application/json',
+          encryption: 'false',
         },
         data: data,
       };
       const response = await axios.post(
-        "https://adminapi.bestlive.io/api/app-user/action/deposit-balance",
+        'https://adminapi.bestlive.io/api/app-user/action/deposit-balance',
         data,
         config
       );
       if (response.status !== 200) {
-        throw new Error("Request failed with status: " + response.status);
+        throw new Error('Request failed with status: ' + response.status);
       } else if (response.data.status === 1) {
         // console.log(response.data);
         handleModalSuccess();
       } else {
-        throw new Error("Invalid response data format");
+        throw new Error('Invalid response data format');
       }
     } catch (error) {
       // Handle any errors
@@ -90,31 +90,31 @@ const UserData = ({ users, token, path, refreshData }) => {
         remark: remark,
       });
       let config = {
-        method: "post",
+        method: 'post',
         maxBodyLength: Infinity,
         headers: {
-          authority: "adminapi.bestlive.io",
-          accept: "application/json, text/plain, */*",
-          "accept-language": "en-IN,en;q=0.9,mr;q=0.8,lb;q=0.7",
+          authority: 'adminapi.bestlive.io',
+          accept: 'application/json, text/plain, */*',
+          'accept-language': 'en-IN,en;q=0.9,mr;q=0.8,lb;q=0.7',
           authorization: `Bearer ${token}`,
-          "cache-control": "no-cache, no-store",
-          "content-type": "application/json",
-          encryption: "false",
+          'cache-control': 'no-cache, no-store',
+          'content-type': 'application/json',
+          encryption: 'false',
         },
         data: data,
       };
       const response = await axios.post(
-        "https://adminapi.bestlive.io/api/bank-account/notification",
+        'https://adminapi.bestlive.io/api/bank-account/notification',
         data,
         config
       );
       if (response.status !== 200) {
-        throw new Error("Request failed with status: " + response.status);
+        throw new Error('Request failed with status: ' + response.status);
       } else if (response.data.status === 1) {
         // console.log(response.data);
         handleModalSuccess();
       } else {
-        throw new Error("Invalid response data format");
+        throw new Error('Invalid response data format');
       }
     } catch (error) {
       // Handle any errors
@@ -146,13 +146,13 @@ const UserData = ({ users, token, path, refreshData }) => {
             <td>{ifsc_code}</td>
             <td>{utr_number}</td>
             <td>
-              {image_name.startsWith("UTR") ? (
+              {image_name.startsWith('UTR') ? (
                 <a href="#" onClick={() => openImageModal(path + image_name)}>
                   View
                 </a>
               ) : (
                 // "No Image"
-                ""
+                ''
               )}
             </td>
             <td>{amount}</td>
@@ -160,14 +160,14 @@ const UserData = ({ users, token, path, refreshData }) => {
             <td className="td-button">
               <button
                 className="action-button accept"
-                onClick={() => openModal(user, "accept")}
+                onClick={() => openModal(user, 'accept')}
               >
                 Accept
               </button>
               &nbsp;
               <button
                 className="action-button reject"
-                onClick={() => openModal(user, "reject")}
+                onClick={() => openModal(user, 'reject')}
               >
                 Reject
               </button>
@@ -198,13 +198,13 @@ const UserData = ({ users, token, path, refreshData }) => {
                 Request successfully processed
               </div>
             )}
-            {actionType === "accept" && (
+            {actionType === 'accept' && (
               <>
                 <label>Please confirm request</label>
               </>
             )}
 
-            {actionType === "accept" && (
+            {actionType === 'accept' && (
               <button
                 className="accept"
                 onClick={() =>
@@ -220,7 +220,7 @@ const UserData = ({ users, token, path, refreshData }) => {
                 Accept
               </button>
             )}
-            {actionType === "reject" && (
+            {actionType === 'reject' && (
               <>
                 <label>Remark:</label>
                 <textarea
